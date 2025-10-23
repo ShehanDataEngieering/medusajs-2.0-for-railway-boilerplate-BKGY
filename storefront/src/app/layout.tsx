@@ -1,6 +1,7 @@
 import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
 import "styles/globals.css"
+import "styles/shofy.scss"
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),

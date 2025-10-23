@@ -1,5 +1,4 @@
 import { Text } from "@medusajs/ui"
-
 import { getProductPrice } from "@lib/util/get-product-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
@@ -30,23 +29,29 @@ export default async function ProductPreview({
   })
 
   return (
-    <LocalizedClientLink href={`/products/${product.handle}`} className="group">
-      <div data-testid="product-wrapper">
-        <Thumbnail
-          thumbnail={product.thumbnail}
-          images={product.images}
-          size="full"
-          isFeatured={isFeatured}
-        />
-        <div className="flex txt-compact-medium mt-4 justify-between">
-          <Text className="text-ui-fg-subtle" data-testid="product-title">
+    <div className="tp-product-item mb-30">
+      <div className="tp-product-thumb p-relative">
+        <LocalizedClientLink href={`/products/${product.handle}`} className="group">
+          <Thumbnail
+            thumbnail={product.thumbnail}
+            images={product.images}
+            size="full"
+            isFeatured={isFeatured}
+          />
+        </LocalizedClientLink>
+      </div>
+      <div className="tp-product-content">
+        <h3 className="tp-product-title">
+          <LocalizedClientLink href={`/products/${product.handle}`}>
             {product.title}
-          </Text>
+          </LocalizedClientLink>
+        </h3>
+        <div className="tp-product-price-wrapper">
           <div className="flex items-center gap-x-2">
             {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
           </div>
         </div>
       </div>
-    </LocalizedClientLink>
+    </div>
   )
 }
