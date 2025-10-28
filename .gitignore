@@ -1,1 +1,4 @@
 .idea/
+ 
+# Ignore Windows ADS Zone.Identifier artifacts everywhere
+*:[Zz]one.Identifier
