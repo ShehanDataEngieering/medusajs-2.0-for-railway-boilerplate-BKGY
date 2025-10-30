@@ -1,6 +1,11 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "bootstrap/scss/bootstrap";
+@import "slick-carousel/slick/slick.css";
+@import "swiper/css/bundle";
+@import "react-modal-video/scss/modal-video.scss";
+@import "../../public/assets/scss/main.scss";
 
 @layer utilities {
   /* Chrome, Safari and Opera */
@@ -110,3 +115,5 @@
     @apply text-[32px] leading-[44px] font-semibold;
   }
 }
+
+

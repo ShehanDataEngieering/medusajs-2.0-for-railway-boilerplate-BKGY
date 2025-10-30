@@ -2,9 +2,9 @@
 
 import { Popover, Transition } from "@headlessui/react"
 import { Button } from "@medusajs/ui"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
-
+import { CartTwo } from "@svg"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import DeleteButton from "@modules/common/components/delete-button"
@@ -18,6 +18,7 @@ const CartDropdown = ({
 }: {
   cart?: HttpTypes.StoreCart | null
 }) => {
+  const router = useRouter()
   const [activeTimer, setActiveTimer] = useState<NodeJS.Timer | undefined>(
     undefined
   )
@@ -75,13 +76,21 @@ const CartDropdown = ({
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
-      <Popover className="relative h-full">
-        <Popover.Button className="h-full">
-          <LocalizedClientLink
-            className="hover:text-ui-fg-base"
-            href="/cart"
-            data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
+      <Popover className="relative lg:block hidden">
+        <Popover.Button
+          as={LocalizedClientLink}
+          href="/cart"
+          data-testid="nav-cart-link"
+          className="h-full hover:text-ui-fg-base pr-2"
+        >
+          <span className="relative inline-block">
+            <CartTwo />
+            {totalItems > 0 && (
+              <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white shadow">
+                {totalItems}
+              </span>
+            )}
+          </span>
         </Popover.Button>
         <Transition
           show={cartDropdownOpen}
@@ -183,15 +192,14 @@ const CartDropdown = ({
                       })}
                     </span>
                   </div>
-                  <LocalizedClientLink href="/cart" passHref>
-                    <Button
-                      className="w-full"
-                      size="large"
-                      data-testid="go-to-cart-button"
-                    >
-                      Go to cart
-                    </Button>
-                  </LocalizedClientLink>
+                  <Button
+                    className="w-full"
+                    size="large"
+                    data-testid="go-to-cart-button"
+                    onClick={() => router.push("/cart")}
+                  >
+                    Go to cart
+                  </Button>
                 </div>
               </>
             ) : (
@@ -202,12 +210,15 @@ const CartDropdown = ({
                   </div>
                   <span>Your shopping bag is empty.</span>
                   <div>
-                    <LocalizedClientLink href="/store">
-                      <>
-                        <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>Explore products</Button>
-                      </>
-                    </LocalizedClientLink>
+                    <span className="sr-only">Go to all products page</span>
+                    <Button
+                      onClick={() => {
+                        close()
+                        router.push("/store")
+                      }}
+                    >
+                      Explore products
+                    </Button>
                   </div>
                 </div>
               </div>
