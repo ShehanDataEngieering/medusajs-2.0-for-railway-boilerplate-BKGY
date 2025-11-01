@@ -9,7 +9,7 @@ const Hero = () => {
               <div className="tp-hero-slide">
                 <div className="tp-hero-content text-center py-24">
                   <h2 className="text-3xl">Discover Fine Jewelry</h2>
-                  <p className="mt-2">Elegant pieces curated for you</p>
+                  <p className="mt-2">EleganASGVSBV t pieces curated for you</p>
                 </div>
               </div>
             </div>

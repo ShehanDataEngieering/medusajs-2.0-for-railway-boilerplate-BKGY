@@ -14,7 +14,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
     <CartProvider>
       <Nav />
       {props.children}
-      <NewFooter />
+      <NewFooter style_2 primary_style /> 
     </CartProvider>
   )
 }

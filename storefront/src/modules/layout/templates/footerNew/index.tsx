@@ -4,7 +4,7 @@ import Link from "next/link"
 // internal
 import { Email, Location } from "@svg"
 
-interface FooterProps { 
+interface FooterProps {
   style_2?: boolean
   style_3?: boolean
   primary_style?: boolean
@@ -68,18 +68,15 @@ const NewFooter: React.FC<FooterProps> = ({
                     <div className="tp-footer-logo">
                       <Link href="/">
                         <Image
-                          src="/assets/img/logo/logo.svg"
-                          alt="logo"
-                          width={150}
-                          height={50}
+                          src="/assets/img/logo/crowncut-logo.png"
+                          alt="CrownCut Logo"
+                          width={200}
+                          height={80}
                           priority
                         />
                       </Link>
                     </div>
-                    <p className="tp-footer-desc">
-                      We are a dynamic team of full stack developers and
-                      designers crafting high-quality web applications.
-                    </p>
+
                     <div className="tp-footer-social">
                       {social_data.map(
                         (s: {
