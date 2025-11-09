@@ -44,6 +44,8 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
       .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
   }, [regions])
 
+
+  console.log(options)
   useEffect(() => {
     if (countryCode) {
       const option = options?.find((o) => o?.country === countryCode)

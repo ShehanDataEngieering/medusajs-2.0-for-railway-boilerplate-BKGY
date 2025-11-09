@@ -116,4 +116,13 @@
   }
 }
 
+/* Force black header text where needed */
+.tp-header-area .main-menu.menu-style-3 > nav > ul > li > a {
+  color: var(--tp-common-black);
+}
+
+.tp-header-area .tp-header-action-item .tp-header-action-btn {
+  color: var(--tp-common-black);
+}
+
 

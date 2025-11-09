@@ -68,7 +68,7 @@ const NewFooter: React.FC<FooterProps> = ({
                     <div className="tp-footer-logo">
                       <Link href="/">
                         <Image
-                          src="/assets/img/logo/crowncut-logo.png"
+                          src="/assets/img/logo/crowncut-logonb.png"
                           alt="CrownCut Logo"
                           width={200}
                           height={80}
