@@ -4,16 +4,13 @@ import Link from "next/link"
 import Image from "next/image"
 import type { StaticImageData } from "next/image"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Pagination, EffectFade, Navigation } from 'swiper/modules';
+import { EffectFade, Navigation, Autoplay } from "swiper/modules"
 import type { SwiperProps } from "swiper/react"
 
 // internal
 import slider_img_1 from "@assets/img/slider/2/slider-1.png"
 import slider_img_2 from "@assets/img/slider/2/slider-2.png"
 import slider_img_3 from "@assets/img/slider/2/slider-3.png"
-import slider_shape from "@assets/img/slider/2/shape/shape-1.png"
-import thumb_shape_1 from "@assets/img/slider/2/shape/shape-2.png"
-import thumb_shape_2 from "@assets/img/slider/2/shape/shape-3.png"
 
 type SliderItem = {
   id: number
@@ -47,72 +44,101 @@ const sliderData: SliderItem[] = [
 // slider setting
 const sliderSetting: SwiperProps = {
   slidesPerView: 1,
-  spaceBetween: 30,
+  spaceBetween: 0,
   effect: "fade",
   loop: true,
-  speed: 800,
+  speed: 2000,
+  autoplay: {
+    delay: 1000,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: false,
+    waitForTransition: true,
+  },
   navigation: {
     nextEl: ".tp-slider-2-button-next",
     prevEl: ".tp-slider-2-button-prev",
-  },
-  pagination: {
-    el: ".tp-slider-2-dot",
-    clickable: true,
   },
 }
 
 const FashionBanner = () => {
   return (
     <>
-      <section className="tp-slider-area p-relative z-index-1">
-        <Swiper
-          {...sliderSetting}
-          modules={[Pagination, Navigation, EffectFade]}
-          className="tp-slider-active-2 swiper-container"
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          @font-face {
+            font-family: 'SourceSerif4ExtraLightItalic';
+            src: url('/assets/fonts/SourceSerif4-ExtraLightItalic.ttf') format('truetype');
+            font-weight: 200;
+            font-style: italic;
+          }
+        `,
+        }}
+      />
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-0 py-20 px-6 lg:px-20 bg-gray-50 auto-rows-fr">
+        <div
+          className="flex flex-col justify-center items-center space-y-6 text-center w-full h-full"
+          style={{ backgroundColor: "#DEDED1" }}
         >
-          {sliderData.map((item) => (
-            <SwiperSlide key={item.id}>
-              <div className="tp-slider-item-2 tp-slider-height-2 p-relative grey-bg-5 d-flex align-items-end">
-                <div className="tp-slider-2-shape">
-                  <Image className="tp-slider-2-shape-1" src={slider_shape} alt="slider_shape" />
-                </div>
-                <div className="container">
-                  <div className="row align-items-center">
-                    <div className="col-xl-6 col-lg-6 col-md-6">
-                      <div className="tp-slider-content-2">
-                        <span>{item.subtitle}</span>
-                        <h3 className="tp-slider-title-2">{item.title}</h3>
-                        <div className="tp-slider-btn-2">
-                          <Link href="/shop" className="tp-btn tp-btn-border">
-                            Shop Collection
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-xl-6 col-lg-6 col-md-6">
-                      <div className="tp-slider-thumb-2-wrapper p-relative">
-                        <div className="tp-slider-thumb-2-shape">
-                          <Image className="tp-slider-thumb-2-shape-1" src={thumb_shape_1} alt="shape" />
-                          <Image className="tp-slider-thumb-2-shape-2" src={thumb_shape_2} alt="shape" />
-                        </div>
-                        <div className="tp-slider-thumb-2 text-end">
-                          <span className="tp-slider-thumb-2-gradient"></span>
-                          <Image src={item.img} alt="slider img" priority />
-                        </div>
-                      </div>
+          <h3
+            className="text-lg font-bold text-gray-900"
+            style={{
+              fontFamily: "SourceSerif4ExtraLightItalic, serif",
+              fontStyle: "italic",
+              fontWeight: 200,
+              fontSize: "33px",
+            }}
+          >
+            Nature's Art, Crafted for the Heart
+          </h3>
+          <p className="text-gray-600 max-w-md">
+            Every gemstone holds a story of love, memory, and meaning. More than
+            a sparkle, it captures emotions that last a lifetime. At CROWNCUT
+            Gems International, we believe every gem is a promise and a timeless
+            reflection of life's most beautiful moments.
+          </p>
+          <Link
+            href="/shop"
+            className="tp-btn tp-btn-border inline-block bg-black text-white px-5 py-2.5 rounded-xl hover:bg-gray-800 transition-all text-sm w-fit"
+          >
+            Shop Collection
+          </Link>
+        </div>
+        <div className="flex flex-col w-full h-full">
+          <div className="tp-slider-area relative z-10 w-full h-full">
+            <Swiper
+              {...sliderSetting}
+              modules={[Navigation, EffectFade, Autoplay]}
+              autoplay={{
+                delay: 1000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: false,
+                waitForTransition: true,
+              }}
+              className="tp-slider-active-2 swiper-container w-full"
+              style={{ height: "100%", width: "100%" }}
+            >
+              {sliderData.map((item) => (
+                <SwiperSlide key={item.id} className="h-full">
+                  <div className="tp-slider-item-2 relative bg-gray-100 flex items-center justify-center rounded-none overflow-hidden w-full h-full">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Image
+                        src={item.img}
+                        alt="slider img"
+                        priority
+                        className="max-w-[100%] max-h-[100%] object-contain"
+                        style={{ margin: "0 auto" }}
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-          <div className="tp-swiper-dot tp-slider-2-dot"></div>
-        </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
       </section>
     </>
   )
 }
 
 export default FashionBanner
-
-
