@@ -355,7 +355,7 @@
         margin-bottom: 20px;
         & a{
             &:hover{
-                color: var(--tp-theme-secondary);
+              
             }
         }
     }
@@ -387,21 +387,13 @@
                 }
             } 
         }
-        &.has-green{
-            #{$self4}{
-                &-content-4{
-                    & span{
-                        color: #72AD3E;
-                    }
-                }
-            }
-        }
+       
 
         &.has-brown{
             #{$self4}{
                 &-content-4{
                     & span{
-                        color: var(--tp-theme-brown);
+                        color:#B6AE9F;
                         margin-bottom: 0;
                     }
                 }

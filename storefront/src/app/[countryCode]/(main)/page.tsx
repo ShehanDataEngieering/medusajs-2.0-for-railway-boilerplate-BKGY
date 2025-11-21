@@ -5,6 +5,8 @@ import Hero from "@modules/home/components/hero"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import FashionBanner from "@modules/layout/banner/fashon-banner"
+import FeatureAreaOne from "@modules/layout/components/features/feature-area-1"
+import ShopBanner from "@modules/layout/components/shop-banner/shop-banner"
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
   description:
@@ -26,6 +28,8 @@ export default async function Home({
   return (
     <>
        <FashionBanner />
+       <FeatureAreaOne />
+       <ShopBanner />
       <div className="py-12">
         <ul className="flex flex-col gap-x-6">
           <FeaturedProducts collections={collections} region={region} />
