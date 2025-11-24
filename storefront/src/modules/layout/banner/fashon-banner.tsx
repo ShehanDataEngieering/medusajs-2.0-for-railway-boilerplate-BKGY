@@ -67,17 +67,18 @@ const FashionBanner = () => {
         dangerouslySetInnerHTML={{
           __html: `
           @font-face {
-            font-family: 'SourceSerif4ExtraLightItalic';
-            src: url('/assets/fonts/SourceSerif4-ExtraLightItalic.ttf') format('truetype');
+            font-family: "SourceSerif4ExtraLightItalic";
+            src: url("/assets/fonts/SourceSerif4-ExtraLightItalic.ttf") format("truetype");
             font-weight: 200;
             font-style: italic;
           }
         `,
         }}
       />
+      <div className="flex flex-col w-full h-full p-1"></div>
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-0 py-20 px-6 lg:px-20 bg-gray-50 auto-rows-fr">
         <div
-          className="flex flex-col justify-center items-center space-y-6 text-center w-full h-full"
+          className="flex flex-col justify-center items-center space-y-6 text-center w-full h-full p-6"
           style={{ backgroundColor: "#DEDED1" }}
         >
           <h3
@@ -89,13 +90,13 @@ const FashionBanner = () => {
               fontSize: "33px",
             }}
           >
-            Nature's Art, Crafted for the Heart
+            Nature&apos;s Art, Crafted for the Heart
           </h3>
           <p className="text-gray-600 max-w-md">
             Every gemstone holds a story of love, memory, and meaning. More than
             a sparkle, it captures emotions that last a lifetime. At CROWNCUT
             Gems International, we believe every gem is a promise and a timeless
-            reflection of life's most beautiful moments.
+            reflection of life&apos;s most beautiful moments.
           </p>
           <Link
             href="/shop"
@@ -103,6 +104,7 @@ const FashionBanner = () => {
           >
             Shop Collection
           </Link>
+          <div className="flex flex-col w-full h-full p-6"></div>
         </div>
         <div className="flex flex-col w-full h-full">
           <div className="tp-slider-area relative z-10 w-full h-full">
@@ -121,13 +123,13 @@ const FashionBanner = () => {
               {sliderData.map((item) => (
                 <SwiperSlide key={item.id} className="h-full">
                   <div className="tp-slider-item-2 relative bg-gray-100 flex items-center justify-center rounded-none overflow-hidden w-full h-full">
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-full relative">
                       <Image
                         src={item.img}
                         alt="slider img"
                         priority
-                        className="max-w-[100%] max-h-[100%] object-contain"
-                        style={{ margin: "0 auto" }}
+                        fill
+                        style={{ objectFit: "cover" }}
                       />
                     </div>
                   </div>
