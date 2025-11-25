@@ -730,7 +730,7 @@ const ShopBanner: React.FC = () => {
                             textAlign: "center",
                           }}
                         >
-                         Aquamarine
+                          Aquamarine
                         </div>
                       </div>
                     </Link>
