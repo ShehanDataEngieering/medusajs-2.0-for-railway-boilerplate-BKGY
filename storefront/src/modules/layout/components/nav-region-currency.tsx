@@ -1,40 +1,50 @@
-'use client'
+"use client"
 
-import { useMemo, useEffect, useState } from 'react'
-import { useParams, usePathname } from 'next/navigation'
-import { HttpTypes } from '@medusajs/types'
-import CountrySelect from './country-select'
-import { useToggleState } from '@medusajs/ui'
-import { updateRegion } from '@lib/data/cart'
+import { useMemo, useEffect, useState } from "react"
+import { useParams, usePathname } from "next/navigation"
+import { HttpTypes } from "@medusajs/types"
+import CountrySelect from "./country-select"
+import { useToggleState } from "@medusajs/ui"
+import { updateRegion } from "@lib/data/cart"
 
-export default function NavRegionCurrency({ regions }: { regions: HttpTypes.StoreRegion[] | null }) {
+export default function NavRegionCurrency({
+  regions,
+}: {
+  regions: HttpTypes.StoreRegion[] | null
+}) {
   const toggleState = useToggleState()
   const { countryCode } = useParams<{ countryCode: string }>()
   const pathname = usePathname()
 
   const currentPath = useMemo(() => {
-    if (!countryCode) return '/'
-    return pathname.split(`/${countryCode}`)[1] || '/'
+    if (!countryCode) return "/"
+    return pathname.split(`/${countryCode}`)[1] || "/"
   }, [pathname, countryCode])
 
   const countries = useMemo(() => {
     const list: { iso2: string; label: string }[] = []
     regions?.forEach((r) => {
       r.countries?.forEach((c) => {
-        if (c.iso_2) list.push({ iso2: c.iso_2, label: c.display_name || c.iso_2.toUpperCase() })
+        if (c.iso_2)
+          list.push({
+            iso2: c.iso_2,
+            label: c.display_name || c.iso_2.toUpperCase(),
+          })
       })
     })
     // Deduplicate by iso2
     const map = new Map<string, { iso2: string; label: string }>()
     list.forEach((c) => map.set(c.iso2, c))
-    return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label))
+    return Array.from(map.values()).sort((a, b) =>
+      a.label.localeCompare(b.label)
+    )
   }, [regions])
 
   const currencyByCountry = useMemo(() => {
     const map = new Map<string, string>()
     regions?.forEach((r) => {
       r.countries?.forEach((c) => {
-        if (c.iso_2) map.set(c.iso_2, r.currency_code?.toUpperCase?.() || '')
+        if (c.iso_2) map.set(c.iso_2, r.currency_code?.toUpperCase?.() || "")
       })
     })
     return map
@@ -48,14 +58,14 @@ export default function NavRegionCurrency({ regions }: { regions: HttpTypes.Stor
     return Array.from(set)
   }, [regions])
 
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('')
-  const [selectedCountry, setSelectedCountry] = useState<string>('')
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("")
+  const [selectedCountry, setSelectedCountry] = useState<string>("")
 
   useEffect(() => {
     if (countryCode && countryCode !== selectedCountry) {
       setSelectedCountry(countryCode)
     }
-    const cur = countryCode ? currencyByCountry.get(countryCode) : ''
+    const cur = countryCode ? currencyByCountry.get(countryCode) : ""
     if (cur && cur !== selectedCurrency) setSelectedCurrency(cur)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode, currencyByCountry])
@@ -70,7 +80,9 @@ export default function NavRegionCurrency({ regions }: { regions: HttpTypes.Stor
     const newCur = e.target.value
     setSelectedCurrency(newCur)
     // Find a region with this currency and pick a country from it
-    const region = regions?.find((r) => r.currency_code?.toUpperCase() === newCur)
+    const region = regions?.find(
+      (r) => r.currency_code?.toUpperCase() === newCur
+    )
     const fallbackCountry = region?.countries?.[0]?.iso_2
     if (fallbackCountry) {
       await updateRegion(fallbackCountry, currentPath)

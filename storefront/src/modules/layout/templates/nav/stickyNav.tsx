@@ -2,18 +2,19 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import useSticky from "hooks/use-stickey"
+import useSticky from "@hooks/use-sticky"
 import NavRegionCurrency from "@modules/layout/components/nav-region-currency"
 import CartButton from "@modules/layout/components/cart-button"
-import { Suspense } from "react"
+import { Suspense, memo } from "react"
 import type { HttpTypes } from "@medusajs/types"
 import Menu from "./nav-componets/menu"
-export default function StickyNav({
+
+function StickyNav({
   regions,
 }: {
   regions: HttpTypes.StoreRegion[] | null
 }) {
-  const { sticky } = useSticky()
+  const { sticky } = useSticky();
 
   return (
     <>
@@ -49,12 +50,12 @@ export default function StickyNav({
                 </div>
 
                 {/* Optional: put region/currency and cart back in when needed */}
-                {/* <div className="col">
+                 <div className="col">
                   <NavRegionCurrency regions={regions} />
-                  <Suspense fallback={null}>
+
                     <CartButton />
-                  </Suspense>
-                </div> */}
+
+                </div>
               </div>
             </div>
           </div>
@@ -63,3 +64,6 @@ export default function StickyNav({
     </>
   )
 }
+
+// Memoize to prevent unnecessary re-renders
+export default memo(StickyNav)

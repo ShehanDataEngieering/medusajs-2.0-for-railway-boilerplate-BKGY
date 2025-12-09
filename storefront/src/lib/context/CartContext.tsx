@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react"
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react"
 import { storeApi } from "@lib/medusaClient"
 
 type Cart = any
@@ -54,7 +54,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     })()
   }, [cartId])
 
-  const ensureCart = async () => {
+  const ensureCart = useCallback(async () => {
     if (cartId) return
     const created = await storeApi.createCart({})
     const newId = (created as any).cart?.id || (created as any).id
@@ -62,32 +62,32 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       setCartId(newId)
       if (typeof window !== "undefined") window.localStorage.setItem("cart_id", newId)
     }
-  }
+  }, [cartId])
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!cartId) return
     const res = await storeApi.retrieveCart(cartId)
     setCart((res as any).cart || res)
-  }
+  }, [cartId])
 
-  const addItem = async ({ variant_id, quantity }: { variant_id: string; quantity: number }) => {
+  const addItem = useCallback(async ({ variant_id, quantity }: { variant_id: string; quantity: number }) => {
     await ensureCart()
     if (!cartId) return
     await storeApi.addLineItem(cartId, { variant_id, quantity })
     await refresh()
-  }
+  }, [cartId, ensureCart, refresh])
 
-  const updateItem = async (lineId: string, quantity: number) => {
+  const updateItem = useCallback(async (lineId: string, quantity: number) => {
     if (!cartId) return
     await storeApi.updateLineItem(cartId, lineId, { quantity })
     await refresh()
-  }
+  }, [cartId, refresh])
 
-  const removeItem = async (lineId: string) => {
+  const removeItem = useCallback(async (lineId: string) => {
     if (!cartId) return
     await storeApi.removeLineItem(cartId, lineId)
     await refresh()
-  }
+  }, [cartId, refresh])
 
   const value = useMemo(
     () => ({ cartId, cart, loading, ensureCart, addItem, updateItem, removeItem, refresh }),

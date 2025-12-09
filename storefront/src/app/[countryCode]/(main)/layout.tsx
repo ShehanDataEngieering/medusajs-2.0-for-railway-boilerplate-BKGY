@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 
-import NewFooter from "@modules/layout/templates/footerNew/footer-1"
 import FooterTwo from "@modules/layout/templates/footerNew/footer-2"
 import Nav from "@modules/layout/templates/nav"
 import { CartProvider } from "@lib/context/CartContext"

@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import menu_data from "@lib/data/menu-data"
+import CartButton from "@modules/layout/components/cart-button"
 
 export default function Menu() {
   return (
@@ -15,5 +16,6 @@ export default function Menu() {
         </li>
       ))}
     </ul>
+
   )
 }

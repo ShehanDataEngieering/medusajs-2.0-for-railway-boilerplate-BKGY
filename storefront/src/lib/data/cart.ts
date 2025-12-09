@@ -137,7 +137,7 @@ export async function deleteLineItem(lineId: string) {
   }
 
   await sdk.store.cart
-    .deleteLineItem(cartId, lineId, getAuthHeaders())
+    .deleteLineItem(cartId, lineId, {}, getAuthHeaders())
     .then(() => {
       revalidateTag("cart")
     })
@@ -154,42 +154,50 @@ export async function enrichLineItems(
 ) {
   if (!lineItems) return []
 
-  // Prepare query parameters
-  const queryParams = {
-    ids: lineItems.map((lineItem) => lineItem.product_id!),
-    regionId: regionId,
-  }
-
-  // Fetch products by their IDs
-  const products = await getProductsById(queryParams)
-  // If there are no line items or products, return an empty array
-  if (!lineItems?.length || !products) {
-    return []
-  }
-
-  // Enrich line items with product and variant information
-  const enrichedItems = lineItems.map((item) => {
-    const product = products.find((p: any) => p.id === item.product_id)
-    const variant = product?.variants?.find(
-      (v: any) => v.id === item.variant_id
-    )
-
-    // If product or variant is not found, return the original item
-    if (!product || !variant) {
-      return item
+  try {
+    // Prepare query parameters
+    const queryParams = {
+      ids: lineItems.map((lineItem) => lineItem.product_id!),
+      regionId: regionId,
     }
 
-    // If product and variant are found, enrich the item
-    return {
-      ...item,
-      variant: {
-        ...variant,
-        product: omit(product, "variants"),
-      },
+    // Fetch products by their IDs
+    const products = await getProductsById(queryParams)
+    // If there are no line items or products, return an empty array
+    if (!lineItems?.length || !products) {
+      return []
     }
-  }) as HttpTypes.StoreCartLineItem[]
 
-  return enrichedItems
+    // Enrich line items with product and variant information
+    const enrichedItems = lineItems.map((item) => {
+      const product = products.find((p: any) => p.id === item.product_id)
+      const variant = product?.variants?.find(
+        (v: any) => v.id === item.variant_id
+      )
+
+      // If product or variant is not found, return the original item
+      if (!product || !variant) {
+        return item
+      }
+
+      // If product and variant are found, enrich the item
+      return {
+        ...item,
+        variant: {
+          ...variant,
+          product: omit(product, "variants"),
+        },
+      }
+    }) as HttpTypes.StoreCartLineItem[]
+
+    return enrichedItems
+  } catch (e: any) {
+    // If enrichment fails for any reason, log the error and return the original line items
+    // so callers can continue rendering the cart without throwing.
+    // eslint-disable-next-line no-console
+    console.error("enrichLineItems failed:", e)
+    return lineItems as HttpTypes.StoreCartLineItem[]
+  }
 }
 
 export async function setShippingMethod({
