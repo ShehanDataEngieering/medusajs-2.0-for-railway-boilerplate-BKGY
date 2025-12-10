@@ -45,15 +45,16 @@ function StickyNav({
                   <div className="main-menu menu-style-3 menu-style-4 p-relative">
                     <nav className="tp-main-menu-content">
                       <Menu />
+                      <NavRegionCurrency regions={regions} />
+
+                        <CartButton />
                     </nav>
                   </div>
                 </div>
 
-                {/* Optional: put region/currency and cart back in when needed */}
-                 <div className="col">
-                  <NavRegionCurrency regions={regions} />
 
-                    <CartButton />
+                 <div className="col">
+
 
                 </div>
               </div>

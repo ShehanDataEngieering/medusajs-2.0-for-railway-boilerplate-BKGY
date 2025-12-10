@@ -13,6 +13,59 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  
+  // Enable SWC minification for faster builds
+  swcMinify: true,
+  
+  // Optimize package imports to reduce bundle size
+  experimental: {
+    optimizePackageImports: ['@medusajs/ui', 'bootstrap', 'react-icons', '@medusajs/icons'],
+  },
+  
+  // Webpack optimizations
+  webpack: (config, { isServer, webpack }) => {
+    // Code splitting optimization
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          cacheGroups: {
+            ...config.optimization.splitChunks.cacheGroups,
+            // Split vendor code into separate chunk
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+            },
+            // Split Medusa packages into separate chunk
+            medusa: {
+              test: /[\\/]node_modules[\\/](@medusajs)[\\/]/,
+              name: 'medusa',
+              chunks: 'all',
+              priority: 20,
+            },
+            // Split common code
+            commons: {
+              name: 'commons',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 5,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      }
+    }
+    
+    // Ignore source maps in production for faster builds
+    if (!isServer && process.env.NODE_ENV === 'production') {
+      config.devtool = false
+    }
+    
+    return config
+  },
   images: {
     remotePatterns: [
       {
