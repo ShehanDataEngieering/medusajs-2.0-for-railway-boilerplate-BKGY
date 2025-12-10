@@ -59,22 +59,12 @@ export default function NavRegionCurrency({
   }, [regions])
 
   const [selectedCurrency, setSelectedCurrency] = useState<string>("")
-  const [selectedCountry, setSelectedCountry] = useState<string>("")
 
   useEffect(() => {
-    if (countryCode && countryCode !== selectedCountry) {
-      setSelectedCountry(countryCode)
-    }
     const cur = countryCode ? currencyByCountry.get(countryCode) : ""
     if (cur && cur !== selectedCurrency) setSelectedCurrency(cur)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode, currencyByCountry])
-
-  const onChangeCountry = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const iso2 = e.target.value
-    setSelectedCountry(iso2)
-    await updateRegion(iso2, currentPath)
-  }
 
   const onChangeCurrency = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCur = e.target.value
@@ -93,34 +83,19 @@ export default function NavRegionCurrency({
 
   return (
     <div className="flex items-center gap-3">
-      {/* Country (flag) selector using existing component */}
+      {/* Shipping to: country selector using existing component */}
       <div
         onMouseEnter={toggleState.open}
         onMouseLeave={toggleState.close}
         onClick={toggleState.toggle}
-        className="cursor-pointer"
+        className="cursor-pointer relative"
         role="button"
         aria-label="Change shipping country"
       >
-        <CountrySelect toggleState={toggleState} regions={regions} />
+        <div className="overflow-visible">
+          <CountrySelect toggleState={toggleState} regions={regions} />
+        </div>
       </div>
-
-      {/* Explicit country dropdown for direct selection */}
-      <label className="hidden small:inline-flex items-center gap-2 text-sm">
-        <span className="text-ui-fg-subtle">Country</span>
-        <select
-          value={selectedCountry}
-          onChange={onChangeCountry}
-          className="h-8 px-2 rounded-md border border-ui-border-base bg-white"
-          aria-label="Select country"
-        >
-          {countries.map((c) => (
-            <option key={c.iso2} value={c.iso2}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </label>
 
       {/* Currency dropdown */}
       <label className="hidden small:inline-flex items-center gap-2 text-sm">

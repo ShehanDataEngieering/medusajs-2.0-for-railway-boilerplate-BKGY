@@ -59,7 +59,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <Listbox
         as="span"
         onChange={handleChange}
@@ -87,7 +87,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
             )}
           </div>
         </Listbox.Button>
-        <div className="flex relative w-full min-w-[320px]">
+        <div className="relative">
           <Transition
             show={state}
             as={Fragment}
@@ -96,7 +96,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options
-              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
+              className="absolute top-full left-0 mt-2 max-h-[442px] overflow-y-auto z-[9999] bg-white drop-shadow-xl text-small-regular uppercase text-black no-scrollbar rounded-md w-[320px] border border-gray-200"
               static
             >
               {options?.map((o, index) => {
