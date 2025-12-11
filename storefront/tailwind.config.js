@@ -1,15 +1,113 @@
+// Fully-sanitized + robust Tailwind config for Medusa
+// - Safely loads @medusajs/ui-preset (if installed)
+// - Extracts preset content safely (handles undefined / nested / empty cases)
+// - Sanitizes ALL content patterns so Tailwind never receives invalid globs
+// - Prevents PostCSS "Patterns must be a string" failures
+// - Keeps all your animations + theme customizations
+
 const path = require("path")
+
+/* -------------------------------------------------------
+ * Helpers
+ * -----------------------------------------------------*/
+
+// Safe require wrapper (avoids crashes if a module is missing)
+function safeRequire(pkg) {
+  try {
+    return require(pkg)
+  } catch {
+    return null
+  }
+}
+
+// Removes invalid, empty, undefined, or broken glob patterns
+function cleanPatterns(arr) {
+  return (arr || []).filter(
+    (p) =>
+      typeof p === "string" &&
+      p.trim() !== "" &&
+      !p.includes("undefined") &&
+      !p.startsWith("undefined")
+  )
+}
+
+/* -------------------------------------------------------
+ * Load @medusajs/ui-preset safely
+ * -----------------------------------------------------*/
+
+const uiPreset = safeRequire("@medusajs/ui-preset")
+
+let presetContent = []
+
+if (uiPreset) {
+  // Case 1: preset exports `content: []`
+  if (Array.isArray(uiPreset.content)) {
+    presetContent = cleanPatterns(uiPreset.content)
+  }
+
+  // Case 2: preset exports `content: "string"`
+  else if (typeof uiPreset.content === "string") {
+    presetContent = cleanPatterns([uiPreset.content])
+  }
+
+  // Case 3: Some presets nest it under `.preset.content`
+  else if (Array.isArray(uiPreset.preset?.content)) {
+    presetContent = cleanPatterns(uiPreset.preset.content)
+  }
+
+  // Fallback if preset is weird
+  else {
+    presetContent = []
+  }
+}
+
+/* -------------------------------------------------------
+ * Local storefront content globs
+ * -----------------------------------------------------*/
+
+const localContent = cleanPatterns([
+  "./src/app/**/*.{js,ts,jsx,tsx}",
+  "./src/pages/**/*.{js,ts,jsx,tsx}",
+  "./src/components/**/*.{js,ts,jsx,tsx}",
+  "./src/modules/**/*.{js,ts,jsx,tsx}",
+  "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
+])
+
+/* -------------------------------------------------------
+ * Merge + final cleanup
+ * -----------------------------------------------------*/
+
+let mergedContent = cleanPatterns([...presetContent, ...localContent])
+
+// Ensure at least ONE valid pattern always exists
+if (mergedContent.length === 0) {
+  mergedContent = ["./src/**/*.{js,ts,jsx,tsx}", "./index.html"]
+}
+
+/* -------------------------------------------------------
+ * Safe optional plugin loading
+ * -----------------------------------------------------*/
+
+let radixPlugin = null
+try {
+  const maybe = safeRequire("tailwindcss-radix")
+  radixPlugin = typeof maybe === "function" ? maybe() : null
+} catch {
+  radixPlugin = null
+}
+
+/* -------------------------------------------------------
+ * Final Tailwind config export
+ * -----------------------------------------------------*/
 
 module.exports = {
   darkMode: "class",
-  presets: [require("@medusajs/ui-preset")],
-  content: [
-    "./src/app/**/*.{js,ts,jsx,tsx}",
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-    "./src/modules/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
-  ],
+
+  // Include preset only if successfully loaded
+  presets: uiPreset ? [uiPreset] : [],
+
+  content: mergedContent,
+
   theme: {
     extend: {
       transitionProperty: {
@@ -76,45 +174,24 @@ module.exports = {
           "100%": { transform: "rotate(360deg)" },
         },
         "fade-in-right": {
-          "0%": {
-            opacity: "0",
-            transform: "translateX(10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateX(0)",
-          },
+          "0%": { opacity: 0, transform: "translateX(10px)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
         },
         "fade-in-top": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+          "0%": { opacity: 0, transform: "translateY(-10px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
         "fade-out-top": {
-          "0%": {
-            height: "100%",
-          },
-          "99%": {
-            height: "0",
-          },
-          "100%": {
-            visibility: "hidden",
-          },
+          "0%": { height: "100%" },
+          "99%": { height: "0" },
+          "100%": { visibility: "hidden" },
         },
         "accordion-slide-up": {
           "0%": {
             height: "var(--radix-accordion-content-height)",
             opacity: "1",
           },
-          "100%": {
-            height: "0",
-            opacity: "0",
-          },
+          "100%": { height: "0", opacity: "0" },
         },
         "accordion-slide-down": {
           "0%": {
@@ -158,5 +235,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+
+  plugins: cleanPatterns([radixPlugin]).length ? [radixPlugin] : [],
 }

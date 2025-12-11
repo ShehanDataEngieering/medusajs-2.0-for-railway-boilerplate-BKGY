@@ -1,6 +1,10 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "bootstrap/scss/bootstrap";
+@import "swiper/css/bundle";
+@import "react-modal-video/scss/modal-video.scss";
+@import "../../public/assets/scss/main.scss";
 
 @layer utilities {
   /* Chrome, Safari and Opera */
@@ -110,3 +114,14 @@
     @apply text-[32px] leading-[44px] font-semibold;
   }
 }
+
+/* Force black header text where needed */
+.tp-header-area .main-menu.menu-style-3 > nav > ul > li > a {
+  color: var(--tp-common-black);
+}
+
+.tp-header-area .tp-header-action-item .tp-header-action-btn {
+  color: var(--tp-common-black);
+}
+
+

@@ -1,4 +1,4 @@
-import { isEqual, pick } from "lodash"
+import { isEqual, pick } from "lodash-es"
 
 export default function compareAddresses(address1: any, address2: any) {
   return isEqual(

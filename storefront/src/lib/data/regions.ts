@@ -2,19 +2,28 @@ import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { cache } from "react"
 import { HttpTypes } from "@medusajs/types"
+import { dedupeRequest, generateCacheKey } from "@lib/util/request-cache"
 
 export const listRegions = cache(async function () {
-  return sdk.store.region
-    .list({}, { next: { tags: ["regions"] } })
-    .then(({ regions }) => regions)
-    .catch(medusaError)
+  const cacheKey = generateCacheKey("regions-list", {})
+  
+  return dedupeRequest(cacheKey, () =>
+    sdk.store.region
+      .list({}, { next: { tags: ["regions"] } })
+      .then(({ regions }) => regions)
+      .catch(medusaError)
+  )
 })
 
 export const retrieveRegion = cache(async function (id: string) {
-  return sdk.store.region
-    .retrieve(id, {}, { next: { tags: ["regions"] } })
-    .then(({ region }) => region)
-    .catch(medusaError)
+  const cacheKey = generateCacheKey("region", { id })
+  
+  return dedupeRequest(cacheKey, () =>
+    sdk.store.region
+      .retrieve(id, {}, { next: { tags: ["regions"] } })
+      .then(({ region }) => region)
+      .catch(medusaError)
+  )
 })
 
 const regionMap = new Map<string, HttpTypes.StoreRegion>()

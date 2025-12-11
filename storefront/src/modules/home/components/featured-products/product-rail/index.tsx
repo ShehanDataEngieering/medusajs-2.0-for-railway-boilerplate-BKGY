@@ -1,7 +1,5 @@
 import { HttpTypes } from "@medusajs/types"
 import { Text } from "@medusajs/ui"
-
-import InteractiveLink from "@modules/common/components/interactive-link"
 import ProductPreview from "@modules/products/components/product-preview"
 
 export default function ProductRail({
@@ -18,22 +16,25 @@ export default function ProductRail({
   }
 
   return (
-    <div className="content-container py-12 small:py-24">
-      <div className="flex justify-between mb-8">
-        <Text className="txt-xlarge">{collection.title}</Text>
-        <InteractiveLink href={`/collections/${collection.handle}`}>
-          View all
-        </InteractiveLink>
+    <section className="tp-product-area pt-50 pb-30">
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <div className="section-title-wrapper mb-30">
+              <Text className="txt-xlarge">{collection.title}</Text>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          {products &&
+            products.map((product) => (
+              <div className="col-xl-3 col-lg-4 col-sm-6" key={product.id}>
+                {/* @ts-ignore */}
+                <ProductPreview product={product} region={region} isFeatured />
+              </div>
+            ))}
+        </div>
       </div>
-      <ul className="grid grid-cols-2 small:grid-cols-3 gap-x-6 gap-y-24 small:gap-y-36">
-        {products &&
-          products.map((product) => (
-            <li key={product.id}>
-              {/* @ts-ignore */}
-              <ProductPreview product={product} region={region} isFeatured />
-            </li>
-          ))}
-      </ul>
-    </div>
+    </section>
   )
 }

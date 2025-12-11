@@ -1,4 +1,4 @@
-import { first } from "lodash"
+import { first } from "lodash-es"
 import { seedGiftcard, seedUser } from "../../data/seed"
 import { test, expect } from "../../index"
 

@@ -17,8 +17,12 @@
     "baseUrl": "./src",
     "paths": {
       "@lib/*": ["lib/*"],
+       "@hooks/*": ["hooks/*"],
       "@modules/*": ["modules/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@assets/*": ["../public/assets/*"],
+      "@svg": ["../public/assets/svg"],
+      "@svg/*": ["../public/assets/svg/*"]
     },
     "plugins": [
       {
