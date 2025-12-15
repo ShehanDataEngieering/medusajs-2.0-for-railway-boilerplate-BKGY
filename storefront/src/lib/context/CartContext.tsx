@@ -17,42 +17,128 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | undefined>(undefined)
 
+// Helper to get cart ID from cookies
+const getCartIdFromCookie = (): string | null => {
+  if (typeof document === "undefined") return null
+  const match = document.cookie.match(/(?:^|;\s*)_medusa_cart_id=([^;]*)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
+// Helper to set cart ID in cookie (client-side)
+const setCartIdInCookie = (cartId: string) => {
+  if (typeof document === "undefined") return
+  const maxAge = 60 * 60 * 24 * 7 // 7 days
+  document.cookie = `_medusa_cart_id=${cartId}; path=/; max-age=${maxAge}; SameSite=Strict${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`
+}
+
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartId, setCartId] = useState<string | null>(null)
   const [cart, setCart] = useState<Cart | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [initialized, setInitialized] = useState(false)
 
+  // Initial cart ID detection
   useEffect(() => {
-    const stored = typeof window !== "undefined" ? window.localStorage.getItem("cart_id") : null
-    if (stored) {
-      setCartId(stored)
+    const initCart = async () => {
+      console.log('🚀 Initializing cart...')
+      
+      // Try to get cart ID from cookie first (set by server actions), then localStorage
+      const cookieCartId = getCartIdFromCookie()
+      const localStorageCartId = typeof window !== "undefined" ? window.localStorage.getItem("cart_id") : null
+      
+      console.log('🔍 Looking for cart ID:', { 
+        fromCookie: cookieCartId, 
+        fromLocalStorage: localStorageCartId 
+      })
+      
+      const stored = cookieCartId || localStorageCartId
+      if (stored) {
+        setCartId(stored)
+        console.log('✅ Cart ID found:', stored)
+        // Sync both storage mechanisms
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("cart_id", stored)
+        }
+        setCartIdInCookie(stored)
+      } else {
+        console.log('⚠️ No cart ID found, will create on first add')
+      }
+      
+      setInitialized(true)
     }
+    
+    initCart()
   }, [])
 
+  // Load cart data when cartId changes
   useEffect(() => {
-    if (!cartId) return
-    ;(async () => {
+    if (!cartId || !initialized) return
+    
+    const loadCart = async () => {
       try {
         setLoading(true)
+        console.log('🔄 Fetching cart with ID:', cartId)
         const res = await storeApi.retrieveCart(cartId)
-        setCart((res as any).cart || res)
+        console.log('📦 Raw cart response:', res)
+        const cartData = (res as any).cart || res
+        console.log('📦 Processed cart data:', cartData)
+        setCart(cartData)
+        console.log('🛒 Cart loaded:', {
+          cartId,
+          itemCount: cartData?.items?.length || 0,
+          items: cartData?.items?.map((i: any) => ({ id: i.id, title: i.title, quantity: i.quantity }))
+        })
       } catch (e) {
-        // create cart if retrieval fails
-        try {
-          const created = await storeApi.createCart({})
-          const newId = (created as any).cart?.id || (created as any).id
-          if (newId) {
-            setCartId(newId)
-            if (typeof window !== "undefined") window.localStorage.setItem("cart_id", newId)
-            const res2 = await storeApi.retrieveCart(newId)
-            setCart((res2 as any).cart || res2)
-          }
-        } catch {}
+        console.error('❌ Error loading cart:', e)
+        // Cart might be invalid, clear it
+        setCartId(null)
+        setCart(null)
+        if (typeof window !== "undefined") {
+          window.localStorage.removeItem("cart_id")
+        }
       } finally {
         setLoading(false)
       }
-    })()
-  }, [cartId])
+    }
+
+    loadCart()
+  }, [cartId, initialized])
+
+  // Poll for cookie changes (for server-side cart updates)
+  useEffect(() => {
+    if (!initialized) return
+    
+    const checkForUpdates = () => {
+      const cookieCartId = getCartIdFromCookie()
+      
+      // If cookie cart ID changed, update our state
+      if (cookieCartId && cookieCartId !== cartId) {
+        console.log('🔄 Detected cookie cart ID change:', { old: cartId, new: cookieCartId })
+        setCartId(cookieCartId)
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("cart_id", cookieCartId)
+        }
+      }
+      
+      // If we have a cart ID, refresh the cart data
+      if (cartId) {
+        storeApi.retrieveCart(cartId).then(res => {
+          const cartData = (res as any).cart || res
+          setCart(cartData)
+        }).catch(() => {
+          // Ignore errors during polling
+        })
+      }
+    }
+
+    // Check immediately
+    checkForUpdates()
+    
+    // Then poll every 2 seconds
+    const interval = setInterval(checkForUpdates, 2000)
+
+    return () => clearInterval(interval)
+  }, [cartId, initialized])
 
   const ensureCart = useCallback(async () => {
     if (cartId) return

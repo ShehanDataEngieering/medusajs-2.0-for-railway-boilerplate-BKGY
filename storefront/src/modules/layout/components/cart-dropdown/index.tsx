@@ -35,6 +35,16 @@ const CartDropdown = ({
   const subtotal = cartState?.subtotal ?? 0
   const itemRef = useRef<number>(totalItems || 0)
 
+  // Debug logging
+  useEffect(() => {
+    console.log('🛒 CartDropdown state:', {
+      hasCart: !!cartState,
+      itemsInCart: cartState?.items?.length || 0,
+      totalItems,
+      items: cartState?.items?.map(i => ({ title: i.title, quantity: i.quantity }))
+    })
+  }, [cartState, totalItems])
+
   const timedOpen = () => {
     open()
 
@@ -67,8 +77,9 @@ const CartDropdown = ({
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalItems, itemRef.current])
+    // Update the ref to track current count
+    itemRef.current = totalItems
+  }, [totalItems, pathname])
 
   return (
     <div

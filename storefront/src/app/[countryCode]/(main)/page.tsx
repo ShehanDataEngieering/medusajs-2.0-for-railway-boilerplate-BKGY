@@ -19,6 +19,8 @@ export default async function Home({
   params: { countryCode: string }
 }) {
   const collections = await getCollectionsWithProducts(countryCode)
+
+  console.log("Featured collections:", collections)
   const region = await getRegion(countryCode)
 
   if (!collections || !region) {

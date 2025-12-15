@@ -11,6 +11,8 @@ export default function ProductRail({
 }) {
   const { products } = collection
 
+  console.log("Featured collection products:", products)
+
   if (!products) {
     return null
   }
