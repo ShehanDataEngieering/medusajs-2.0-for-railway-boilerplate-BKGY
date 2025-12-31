@@ -19,6 +19,7 @@ type FilterOptions = {
   inStock: boolean
   onSale: boolean
   search: string
+  category: string
 }
 
 export default async function PaginatedProducts({
@@ -77,6 +78,18 @@ export default async function PaginatedProducts({
 
   // Apply client-side filters
   if (filters) {
+    // Category filter - apply first
+    if (filters.category) {
+      products = products.filter((p) => {
+        // Filter by product title or tags matching the category slug
+        const categorySlug = filters.category.toLowerCase()
+        const productTitle = p.title?.toLowerCase() || ''
+        const productHandle = p.handle?.toLowerCase() || ''
+        
+        return productTitle.includes(categorySlug) || productHandle.includes(categorySlug)
+      })
+    }
+
     // Search filter
     if (filters.search) {
       const searchLower = filters.search.toLowerCase()

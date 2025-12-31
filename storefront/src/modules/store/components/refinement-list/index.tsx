@@ -10,6 +10,7 @@ type FilterOptions = {
   inStock: boolean
   onSale: boolean
   search: string
+  category: string
 }
 
 type RefinementListProps = {
@@ -58,6 +59,21 @@ const RefinementList = ({ sortBy, filters, 'data-testid': dataTestId }: Refineme
           <SortProducts sortBy={sortBy} setQueryParams={setQueryParams} data-testid={dataTestId} />
         </div>
       </div>
+
+      {/* Active Category Filter */}
+      {filters?.category && (
+        <div className="alert alert-info d-flex justify-content-between align-items-center mb-3">
+          <span>
+            <strong>Category:</strong> {filters.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </span>
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => updateFilters({ category: '' })}
+          >
+            Clear
+          </button>
+        </div>
+      )}
       
       {/* Search Filter */}
       <div className="card mb-3">

@@ -18,6 +18,7 @@ type Params = {
     onSale?: string
     search?: string
     view?: "grid" | "list"
+    category?: string
   }
   params: {
     countryCode: string
@@ -33,7 +34,8 @@ export default async function StorePage({ searchParams, params }: Params) {
     inStock,
     onSale,
     search,
-    view
+    view,
+    category
   } = searchParams
 
   return (
@@ -49,6 +51,7 @@ export default async function StorePage({ searchParams, params }: Params) {
         inStock: inStock === 'true',
         onSale: onSale === 'true',
         search: search || '',
+        category: category || '',
       }}
       viewMode={view || 'grid'}
     />

@@ -11,6 +11,7 @@ type FilterOptions = {
   inStock: boolean
   onSale: boolean
   search: string
+  category: string
 }
 
 const StoreTemplate = ({
