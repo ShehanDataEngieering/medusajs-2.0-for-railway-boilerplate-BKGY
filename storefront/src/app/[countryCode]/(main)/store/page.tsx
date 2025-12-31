@@ -12,6 +12,12 @@ type Params = {
   searchParams: {
     sortBy?: SortOptions
     page?: string
+    minPrice?: string
+    maxPrice?: string
+    inStock?: string
+    onSale?: string
+    search?: string
+    view?: "grid" | "list"
   }
   params: {
     countryCode: string
@@ -19,13 +25,32 @@ type Params = {
 }
 
 export default async function StorePage({ searchParams, params }: Params) {
-  const { sortBy, page } = searchParams
+  const { 
+    sortBy, 
+    page,
+    minPrice,
+    maxPrice,
+    inStock,
+    onSale,
+    search,
+    view
+  } = searchParams
 
   return (
     <StoreTemplate
       sortBy={sortBy}
       page={page}
       countryCode={params.countryCode}
+      filters={{
+        priceRange: { 
+          min: minPrice ? parseFloat(minPrice) : undefined, 
+          max: maxPrice ? parseFloat(maxPrice) : undefined 
+        },
+        inStock: inStock === 'true',
+        onSale: onSale === 'true',
+        search: search || '',
+      }}
+      viewMode={view || 'grid'}
     />
   )
 }

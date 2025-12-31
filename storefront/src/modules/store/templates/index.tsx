@@ -6,35 +6,53 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 
 import PaginatedProducts from "./paginated-products"
 
+type FilterOptions = {
+  priceRange: { min?: number; max?: number }
+  inStock: boolean
+  onSale: boolean
+  search: string
+}
+
 const StoreTemplate = ({
   sortBy,
   page,
   countryCode,
+  filters,
+  viewMode,
 }: {
   sortBy?: SortOptions
   page?: string
   countryCode: string
+  filters?: FilterOptions
+  viewMode?: "grid" | "list"
 }) => {
   const pageNumber = page ? parseInt(page) : 1
   const sort = sortBy || "created_at"
+  const view = viewMode || "grid"
 
   return (
     <div
-      className="flex flex-col small:flex-row small:items-start py-6 content-container"
+      className="container py-4"
       data-testid="category-container"
     >
-      <RefinementList sortBy={sort} />
-      <div className="w-full">
-        <div className="mb-8 text-2xl-semi">
-          <h1 data-testid="store-page-title">All products</h1>
+      <div className="row">
+        <div className="col-lg-3 col-md-4">
+          <RefinementList sortBy={sort} filters={filters} />
         </div>
+        <div className="col-lg-9 col-md-8">
+          <div className="mb-4">
+            <h1 className="h2" data-testid="store-page-title">All products</h1>
+          </div>
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts
             sortBy={sort}
             page={pageNumber}
             countryCode={countryCode}
+            filters={filters}
+            viewMode={view}
           />
         </Suspense>
+        </div>
       </div>
     </div>
   )
