@@ -51,7 +51,7 @@ export default function GemstoneCategoriesPage() {
               href={`/store?category=${category.slug}`}
               className="text-decoration-none"
             >
-              <div className="card h-100 shadow-sm category-card">
+              <div className="card h-100 shadow-sm transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                 <div
                   className="position-relative overflow-hidden"
                   style={{ height: "200px" }}
@@ -59,7 +59,7 @@ export default function GemstoneCategoriesPage() {
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="card-img-top category-img"
+                    className="card-img-top transition-transform duration-300 ease-in-out hover:scale-110"
                     style={{
                       width: "100%",
                       height: "100%",
@@ -83,38 +83,6 @@ export default function GemstoneCategoriesPage() {
           </div>
         ))}
       </div>
-
-      {/* Browse All Link */}
-      <div className="row mt-5">
-        <div className="col-12 text-center">
-          <LocalizedClientLink
-            href="/store"
-            className="btn btn-primary btn-lg"
-          >
-            Browse All Products
-          </LocalizedClientLink>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .category-card {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          cursor: pointer;
-        }
-
-        .category-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        .category-card:hover .category-img {
-          transform: scale(1.1);
-        }
-
-        .category-img {
-          transition: transform 0.3s ease;
-        }
-      `}</style>
     </div>
   )
 }
