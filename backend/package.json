@@ -68,5 +68,10 @@
     "engines": {
         "node": "22.x",
         "npm": "10.x"
+    },
+    "pnpm": {
+        "overrides": {
+            "next": "15.5.12"
+        }
     }
 }
