@@ -1,6 +1,5 @@
 "use client"
 
-import { clx } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 export function Pagination({
@@ -33,26 +32,22 @@ export function Pagination({
     label: string | number,
     isCurrent: boolean
   ) => (
-    <button
-      key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
-      })}
-      disabled={isCurrent}
-      onClick={() => handlePageChange(p)}
-    >
-      {label}
-    </button>
+    <li key={p} className={`page-item ${isCurrent ? 'active' : ''}`}>
+      <button
+        className="page-link"
+        disabled={isCurrent}
+        onClick={() => handlePageChange(p)}
+      >
+        {label}
+      </button>
+    </li>
   )
 
   // Function to render ellipsis
   const renderEllipsis = (key: string) => (
-    <span
-      key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
-    >
-      ...
-    </span>
+    <li key={key} className="page-item disabled">
+      <span className="page-link">...</span>
+    </li>
   )
 
   // Function to render page buttons based on the current page and total pages
@@ -107,8 +102,8 @@ export function Pagination({
 
   // Render the component
   return (
-    <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
-    </div>
+    <nav className="d-flex justify-content-center w-100 mt-5" aria-label="Product pagination">
+      <ul className="pagination" data-testid={dataTestid}>{renderPageButtons()}</ul>
+    </nav>
   )
 }
