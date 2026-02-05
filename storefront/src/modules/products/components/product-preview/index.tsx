@@ -1,4 +1,3 @@
-import { Text } from "@medusajs/ui"
 import { getProductPrice } from "@lib/util/get-product-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
@@ -20,9 +19,9 @@ export default function ProductPreview({
   })
 
   return (
-    <div className="tp-product-item mb-30">
-      <div className="tp-product-thumb p-relative">
-        <LocalizedClientLink href={`/products/${product.handle}`} className="group">
+    <div className="card h-100">
+      <div className="position-relative">
+        <LocalizedClientLink href={`/products/${product.handle}`}>
           <Thumbnail
             thumbnail={product.thumbnail}
             images={product.images}
@@ -31,14 +30,14 @@ export default function ProductPreview({
           />
         </LocalizedClientLink>
       </div>
-      <div className="tp-product-content">
-        <h3 className="tp-product-title">
+      <div className="card-body">
+        <h5 className="card-title">
           <LocalizedClientLink href={`/products/${product.handle}`}>
             {product.title}
           </LocalizedClientLink>
-        </h3>
-        <div className="tp-product-price-wrapper">
-          <div className="flex items-center gap-x-2">
+        </h5>
+        <div className="mt-2">
+          <div className="d-flex align-items-center gap-2">
             {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
           </div>
         </div>

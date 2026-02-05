@@ -36,14 +36,14 @@ const menu_data = [
     id: 2,
     products: true,
     title: 'Products',
-    link: '/shop',
+    link: '/categories',
     product_pages: [
       {
         title: 'Shop Page',
-        link: '/shop',
+        link: '/categories',
         mega_menus: [
-          { title: 'Only Categories', link: '/shop-category' },
-          { title: 'Shop Grid with Sideber', link: '/shop' },
+          { title: 'Only Categories', link: '/categories' },
+          { title: 'Shop Grid with Sideber', link: '/store' },
           { title: 'Product Details', link: '/product-details' },
         ]
       },

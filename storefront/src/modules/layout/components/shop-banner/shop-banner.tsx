@@ -134,7 +134,7 @@ const ShopBanner: React.FC = () => {
                     }}
                   >
                     <Link
-                      href="/shop?gem=agate"
+                      href="/categories"
                       className="tp-gem-card"
                       style={{ textDecoration: "none", color: "inherit" }}
                     >

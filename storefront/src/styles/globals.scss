@@ -114,7 +114,16 @@
     @apply text-[32px] leading-[44px] font-semibold;
   }
 }
+/* Custom text selection color */
+::selection {
+  background-color: #2563eb;
+  color: white;
+}
 
+::-moz-selection {
+  background-color: #2563eb;
+  color: white;
+}
 /* Force black header text where needed */
 .tp-header-area .main-menu.menu-style-3 > nav > ul > li > a {
   color: var(--tp-common-black);
@@ -122,6 +131,99 @@
 
 .tp-header-area .tp-header-action-item .tp-header-action-btn {
   color: var(--tp-common-black);
+}
+
+/* Product detail refresh */
+.product-detail {
+  background: radial-gradient(circle at top, #fef9f3 0%, #f4f7fb 35%, #eff1f4 100%);
+}
+
+.product-detail .card {
+  border-radius: 1.5rem;
+}
+
+.product-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-story-column,
+.product-media-column {
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .product-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .product-story-column {
+    flex: 0 0 62.5%;
+    max-width: 62.5%;
+  }
+
+  .product-media-column {
+    flex: 0 0 37.5%;
+    max-width: 37.5%;
+  }
+}
+
+.product-story-card {
+  background: linear-gradient(135deg, #fffdf7, #f6f9ff);
+}
+
+.product-detail .product-tabs-wrapper {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.product-detail .product-info-card {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.product-detail .product-gallery {
+  background: #fff;
+  min-height: auto;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.product-detail .product-gallery img,
+.product-detail .product-gallery picture,
+.product-detail .product-gallery video {
+  max-height: 360px;
+  object-fit: contain;
+}
+
+.product-detail .product-actions-card {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.product-detail .product-actions-card .card-body {
+  min-height: 100%;
+}
+
+.product-actions-card button {
+  background-color: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+.product-actions-card button:hover,
+.product-actions-card button:focus-visible {
+  background-color: #e2e8f0;
+  border-color: rgba(15, 23, 42, 0.3);
+  color: #0f172a;
+}
+
+.related-products-section {
+  background: linear-gradient(120deg, #080808, #111827);
+}
+
+.related-products-section h2 {
+  letter-spacing: 0.05em;
 }
 
 
