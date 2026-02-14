@@ -55,10 +55,17 @@ const FooterTwo = () => {
                     </div>
                     <div className="tp-footer-widget-content">
                       <div className="tp-footer-talk mb-20">
-                        <span>Got Questions? Call us</span>
-                        <h4>
-                          <a href="tel:670-413-90-762">+670 413 90 762</a>
-                        </h4>
+                        <span>Contact Us</span>
+                        <h4>Crowncut Gems International</h4>
+                        <p className="mb-10">We’d love to hear from you.</p>
+                        <p className="mb-10">
+                          For inquiries about gemstones, orders, or partnerships,
+                          please reach out using the details below.
+                        </p>
+                        <p>
+                          <strong>Phone / WhatsApp:</strong>{" "}
+                          <a href="tel:+46760889995">076 088 99 95</a>
+                        </p>
                       </div>
                       <div className="tp-footer-contact">
                         <div className="tp-footer-contact-item d-flex align-items-start">
@@ -69,8 +76,8 @@ const FooterTwo = () => {
                           </div>
                           <div className="tp-footer-contact-content">
                             <p>
-                              <a href="mailto:shofy@support.com">
-                                swe.hamedhasan@gmail.com
+                              <a href="mailto:crowncutgems@gmail.com">
+                                crowncutgems@gmail.com
                               </a>
                             </p>
                           </div>
@@ -84,16 +91,19 @@ const FooterTwo = () => {
                           <div className="tp-footer-contact-content">
                             <p>
                               <a
-                                href="https://www.google.com/maps/place/Sleepy+Hollow+Rd,+Gouverneur,+NY+13642,+USA/@44.3304966,-75.4552367,17z/data=!3m1!4b1!4m6!3m5!1s0x4cccddac8972c5eb:0x56286024afff537a!8m2!3d44.3304928!4d-75.453048!16s%2Fg%2F1tdsjdj4"
+                                href="https://maps.google.com/?q=Studieg%C3%A5ngen%208%2C%2041681%2C%20Gothenburg%2C%20Sweden"
                                 target="_blank"
                               >
-                                79 Sleepy Hollow St. <br /> Jamaica, New York
-                                1432
+                                Studiegången 8<br />41681 Gothenburg, Sweden
                               </a>
                             </p>
                           </div>
                         </div>
                       </div>
+                      <p className="mb-0">
+                        You may also use our contact form and our team will respond
+                        within 24 hours.
+                      </p>
                     </div>
                   </div>
                 </div>
